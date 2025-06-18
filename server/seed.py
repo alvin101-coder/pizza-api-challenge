@@ -1,21 +1,30 @@
-from server.app import db
+from server.app import app, db
 from server.models.restaurant import Restaurant
 from server.models.pizza import Pizza
 from server.models.restaurant_pizza import RestaurantPizza
 
-db.create_all()
+with app.app_context(): 
+    restaurants = [
+        Restaurant(name="Mario's Pizza", address="Street 123"),
+        Restaurant(name="Luigi's Pizza", address="Street 456"),
+    ]
 
+    pizzas = [
+        Pizza(name="Pepperoni", ingredients="Dough, Tomato, Cheese, Pepperoni"),
+        Pizza(name="Veggie", ingredients="Dough, Tomato, Cheese, Bell Peppers, Olives"),
+    ]
 
-restaurants = [
-    Restaurant(name="Mario's Pizza", address="Street 123"),
-    Restaurant(name="Luigi's Pizza", address="Street 456"),
-]
+    print("Adding restaurants...")
+    db.session.add_all(restaurants)
+    db.session.commit()
+    print(" Restaurants added!")
 
-pizzas = [
-    Pizza(name="Pepperoni", ingredients="Dough, Tomato, Cheese, Pepperoni"),
-    Pizza(name="Veggie", ingredients="Dough, Tomato, Cheese, Bell Peppers, Olives"),
-]
+    print("Adding pizzas...")
+    db.session.add_all(pizzas)
+    db.session.commit()
+    print(" Pizzas added!")
 
+    all_pizzas = Pizza.query.all()
+    print(f"Database now contains: {all_pizzas}")
 
-db.session.add_all(restaurants + pizzas)
-db.session.commit()
+    print(" Seeding complete!")

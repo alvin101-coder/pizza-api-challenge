@@ -14,7 +14,15 @@ def get_single_restaurant(id):
     restaurant = Restaurant.query.get(id)
     if not restaurant:
         return jsonify({"error": "Restaurant not found"}), 404
-    return jsonify(restaurant.to_dict())
+
+    pizzas = [{"id": rp.pizza.id, "name": rp.pizza.name, "ingredients": rp.pizza.ingredients} for rp in restaurant.restaurant_pizzas]
+    
+    return jsonify({
+        "id": restaurant.id,
+        "name": restaurant.name,
+        "address": restaurant.address,
+        "pizzas": pizzas
+    })
 
 @restaurant_bp.route('/restaurants/<int:id>', methods=['DELETE'])
 def delete_restaurant(id):

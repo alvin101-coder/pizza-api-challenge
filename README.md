@@ -1,80 +1,59 @@
- Pizza API Challenge
+Pizza API Challenge
 
-This project is a Flask-based API for managing pizzas, restaurants, and the relationship between them. It supports CRUD operations, validation rules, and data persistence using SQLite.
+This project is a Flask-based API for managing pizzas, restaurants, and their relationships. It supports CRUD operations, validation rules, and data persistence using SQLite.  
 
-Setup Instructions
+### Quick Start
 
-=> Install Dependencies
-Ensure you have pipenv installed, then run:
-"pipenv install"
+1. Clone the repository:  
+   `bash
+   git clone https://github.com/alvin101-coder/pizza-api-challenge
+   cd pizza-api-challenge  
+   `  
+2. Install dependencies:  
+   `bash
+   pipenv install  
+   `  
+3. Activate the virtual environment:  
+   `bash
+   pipenv shell  
+   `  
+4. Run the Flask server:  
+   `bash
+   flask run  
+   `  
+By default, the app runs on http://127.0.0.1:5000/.  
 
-This will install Flask, Flask-Migrate, Flask-SQLAlchemy, and other required packages.
+---
 
-=> Activate Virtual Environment
-Before running any commands, activate your environment:
-`
- pipenv shell
-`
+### Database Setup & Migration
 
-=> Run the Flask App
-Start the Flask server using:
-`
-flask run
-`
-By default, it runs on http://127.0.0.1:5000/.
+Command Description
+flask db init Initialize migrations
+flask db migrate -m "Initial migration" Generate migration scripts
+flask db upgrade Apply migrations
+python server/seed.py Populate the database with sample data
 
+---
 
-###Database Setup & Migration
+### API Routes
 
-=> Initialize Migrations
-`
-flask db init
-`
-This sets up migration files.
-
-=> Generate Migration Scripts
-`
-flask db migrate -m "Initial migration"
-`
-
-=> Apply Migrations
-`
-flask db upgrade
-`
-This creates necessary tables.
-
-=> Seed the Database
-`         
-python server/seed.py
-`
-This populates the database with sample data.
-
-
-###API Routes & Usage
-
-=> Restaurants
 Method Endpoint Description
 GET /restaurants Fetch all restaurants
-GET /restaurants/<id> Fetch a specific restaurant
-DELETE /restaurants/<id> Delete a restaurant
-
-=> Pizzas
-Method Endpoint Description
+GET /restaurants/<id> Fetch a specific restaurant and its pizzas
+DELETE /restaurants/<id> Delete a restaurant (cascading delete)
 GET /pizzas Fetch all pizzas
-
-=> Restaurant-Pizza Relationship
-Method Endpoint Description
 POST /restaurant_pizzas Add a pizza to a restaurant
 
+---
 
-###Example Requests & Responses
+### Example Requests & Responses
 
-=> Fetch All Restaurants
-Request
-`
-GET /restaurants
-`
-Response
+Fetch All Restaurants
+Request:  
+`bash
+GET /restaurants  
+`  
+Response:  
 `json
 [
   {
@@ -90,13 +69,13 @@ Response
 ]
 `
 
-=> Add a Restaurant-Pizza Relationship
-Request
+### Add a Restaurant-Pizza Relationship
+Request:  
 `bash
-POST /restaurant_pizzas
-Content-Type: application/json
-`
-Payload
+POST /restaurant_pizzas  
+Content-Type: application/json  
+`  
+Payload:  
 `json
 {
   "price": 20,
@@ -104,7 +83,7 @@ Payload
   "restaurant_id": 2
 }
 `
-Response
+Response:  
 `json
 {
   "id": 1,
@@ -114,24 +93,51 @@ Response
 }
 `
 
+---
 
-###Validation Rules
-- Price validation in RestaurantPizza
-  - Must be between 1 and 30
-  - If outside range, API returns 400 Bad Request
+### Validation Rules
 
-Example of validation failure:
+Rule Description
+Price Must be between 1 and 30
+Error Handling If outside the range, the API returns 400 Bad Request
+
+Example of validation failure response:  
 `json
 {
-  "error": "Price must be between 1 and 30"
+  "errors": ["Price must be between 1 and 30"]
 }
 `
 
+---
 
-###Postman Instructions
-(1)Open Postman  
-(2) Create a New Collection  
-(3) Add Requests (GET, POST, DELETE)
-(4) Set Headers (If Necessary):  
-   - Content-Type: application/json
-(5) Test API Calls and Observe Responses  
+Error Handling
+
+Status Code Reason
+400 Bad Request Invalid input or validation failure
+404 Not Found Resource does not exist
+405 Method Not Allowed Incorrect HTTP method used
+500 Internal Server Error Unexpected server failure
+
+---
+
+### Postman Instructions
+
+1. Open Postman  
+2. Create a New Collection  
+3. Add Requests (GET, POST, DELETE)  
+4. Set Headers if necessary:  
+   - Content-Type: application/json  
+5. Test API calls and observe responses  
+
+---
+
+### Contributing
+
+If you would like to contribute:  
+
+1. Fork the repository  
+2. Create a feature branch (git checkout -b feature-name)  
+3. Commit changes (git commit -m "feat: Add new feature")  
+4. Push and create a pull request  
+
+---
